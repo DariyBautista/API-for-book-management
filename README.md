@@ -43,12 +43,31 @@
    pip install -r requirements.txt
    ```
 
-2. Виконання міграцій:
+2. Ініціалізація alembic:
+   ```bash
+   alembic init alembic
+   ```
+3. Налаштування alembic.ini  
+   змінити під свою базу даних
+   ```bash
+   sqlalchemy.url = postgresql://username:password@localhost/DBname
+   ```
+4. Оновлюємо alembic/env.py
+   ```bash
+   from app.models import Base  
+   from app.database import DATABASE_URL  
+
+   config.set_main_option("sqlalchemy.url", DATABASE_URL)  
+   target_metadata = Base.metadata  
+   ```
+5. Створення та застосування міграцій
+   ```bash
+   alembic revision --autogenerate -m "Initial migration"
+   ```
    ```bash
    alembic upgrade head
    ```
-
-3. Запуск сервера:
+6. Запуск сервера:
    ```bash
    uvicorn app.main:app --reload
    ```
